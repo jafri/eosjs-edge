@@ -1,11 +1,11 @@
 /**
  * @module API
  */
-import { AbiProvider, AuthorityProvider, BinaryAbi, CachedAbi, SignatureProvider } from "./eosjs-api-interfaces";
-import JsonRpc from "./eosjs-jsonrpc";
-import { Abi, PushTransactionArgs } from "./eosjs-rpc-interfaces";
-import * as ser from "./eosjs-serialize";
-export default class Api {
+import { AbiProvider, AuthorityProvider, BinaryAbi, CachedAbi, SignatureProvider } from './eosjs-api-interfaces';
+import { JsonRpc } from './eosjs-jsonrpc';
+import { Abi, PushTransactionArgs } from './eosjs-rpc-interfaces';
+import * as ser from './eosjs-serialize';
+export declare class Api {
     /** Issues RPC calls */
     rpc: JsonRpc;
     /** Get subset of `availableKeys` needed to meet authorities in a `transaction` */

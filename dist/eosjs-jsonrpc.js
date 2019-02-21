@@ -53,11 +53,11 @@ var eosjs_numeric_1 = require("./eosjs-numeric");
 var eosjs_rpcerror_1 = require("./eosjs-rpcerror");
 function arrayToHex(data) {
     var e_1, _a;
-    var result = "";
+    var result = '';
     try {
         for (var data_1 = __values(data), data_1_1 = data_1.next(); !data_1_1.done; data_1_1 = data_1.next()) {
             var x = data_1_1.value;
-            result += ("00" + x.toString(16)).slice(-2);
+            result += ('00' + x.toString(16)).slice(-2);
         }
     }
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -74,8 +74,8 @@ var JsonRpc = /** @class */ (function () {
     /**
      * @param args
      *    * `fetch`:
-     *      * browsers: leave `null` or `undefined`
-     *      * node: provide an implementation
+     *    * browsers: leave `null` or `undefined`
+     *    * node: provide an implementation
      */
     function JsonRpc(endpoint, args) {
         if (args === void 0) { args = {}; }
@@ -98,7 +98,7 @@ var JsonRpc = /** @class */ (function () {
                         f = this.fetchBuiltin;
                         return [4 /*yield*/, f(this.endpoint + path, {
                                 body: JSON.stringify(body),
-                                method: "POST",
+                                method: 'POST',
                             })];
                     case 1:
                         response = _a.sent();
@@ -106,7 +106,7 @@ var JsonRpc = /** @class */ (function () {
                     case 2:
                         json = _a.sent();
                         if (json.processed && json.processed.except) {
-                            throw new eosjs_rpcerror_1.default(json);
+                            throw new eosjs_rpcerror_1.RpcError(json);
                         }
                         return [3 /*break*/, 4];
                     case 3:
@@ -115,7 +115,7 @@ var JsonRpc = /** @class */ (function () {
                         throw e_2;
                     case 4:
                         if (!response.ok) {
-                            throw new eosjs_rpcerror_1.default(json);
+                            throw new eosjs_rpcerror_1.RpcError(json);
                         }
                         return [2 /*return*/, json];
                 }
@@ -123,60 +123,55 @@ var JsonRpc = /** @class */ (function () {
         });
     };
     /** Raw call to `/v1/chain/get_abi` */
-    // tslint:disable-next-line:variable-name
-    JsonRpc.prototype.get_abi = function (account_name) {
+    JsonRpc.prototype.get_abi = function (accountName) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/chain/get_abi", { account_name: account_name })];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/chain/get_abi', { account_name: accountName })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
     /** Raw call to `/v1/chain/get_account` */
-    // tslint:disable-next-line:variable-name
-    JsonRpc.prototype.get_account = function (account_name) {
+    JsonRpc.prototype.get_account = function (accountName) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/chain/get_account", { account_name: account_name })];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/chain/get_account', { account_name: accountName })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
     /** Raw call to `/v1/chain/get_block_header_state` */
-    // tslint:disable-next-line:variable-name
-    JsonRpc.prototype.get_block_header_state = function (block_num_or_id) {
+    JsonRpc.prototype.get_block_header_state = function (blockNumOrId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/chain/get_block_header_state", { block_num_or_id: block_num_or_id })];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/chain/get_block_header_state', { block_num_or_id: blockNumOrId })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
     /** Raw call to `/v1/chain/get_block` */
-    // tslint:disable-next-line:variable-name
-    JsonRpc.prototype.get_block = function (block_num_or_id) {
+    JsonRpc.prototype.get_block = function (blockNumOrId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/chain/get_block", { block_num_or_id: block_num_or_id })];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/chain/get_block', { block_num_or_id: blockNumOrId })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
     /** Raw call to `/v1/chain/get_code` */
-    // tslint:disable-next-line:variable-name
-    JsonRpc.prototype.get_code = function (account_name) {
+    JsonRpc.prototype.get_code = function (accountName) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/chain/get_code", { account_name: account_name })];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/chain/get_code', { account_name: accountName })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -188,7 +183,7 @@ var JsonRpc = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/chain/get_currency_balance", { code: code, account: account, symbol: symbol })];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/chain/get_currency_balance', { code: code, account: account, symbol: symbol })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -199,7 +194,7 @@ var JsonRpc = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/chain/get_currency_stats", { code: code, symbol: symbol })];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/chain/get_currency_stats', { code: code, symbol: symbol })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -210,7 +205,7 @@ var JsonRpc = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/chain/get_info", {})];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/chain/get_info', {})];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -221,34 +216,32 @@ var JsonRpc = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/chain/get_producer_schedule", {})];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/chain/get_producer_schedule', {})];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
     /** Raw call to `/v1/chain/get_producers` */
-    // tslint:disable-next-line:variable-name
-    JsonRpc.prototype.get_producers = function (json, lower_bound, limit) {
+    JsonRpc.prototype.get_producers = function (json, lowerBound, limit) {
         if (json === void 0) { json = true; }
-        if (lower_bound === void 0) { lower_bound = ""; }
+        if (lowerBound === void 0) { lowerBound = ''; }
         if (limit === void 0) { limit = 50; }
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/chain/get_producers", { json: json, lower_bound: lower_bound, limit: limit })];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/chain/get_producers', { json: json, lower_bound: lowerBound, limit: limit })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
     /** Raw call to `/v1/chain/get_raw_code_and_abi` */
-    // tslint:disable-next-line:variable-name
-    JsonRpc.prototype.get_raw_code_and_abi = function (account_name) {
+    JsonRpc.prototype.get_raw_code_and_abi = function (accountName) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/chain/get_raw_code_and_abi", { account_name: account_name })];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/chain/get_raw_code_and_abi', { account_name: accountName })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -272,11 +265,11 @@ var JsonRpc = /** @class */ (function () {
     };
     /** Raw call to `/v1/chain/get_table_rows` */
     JsonRpc.prototype.get_table_rows = function (_a) {
-        var _b = _a.json, json = _b === void 0 ? true : _b, code = _a.code, scope = _a.scope, table = _a.table, _c = _a.table_key, table_key = _c === void 0 ? "" : _c, _d = _a.lower_bound, lower_bound = _d === void 0 ? "" : _d, _e = _a.upper_bound, upper_bound = _e === void 0 ? "" : _e, _f = _a.index_position, index_position = _f === void 0 ? 1 : _f, _g = _a.key_type, key_type = _g === void 0 ? "" : _g, _h = _a.limit, limit = _h === void 0 ? 10 : _h;
+        var _b = _a.json, json = _b === void 0 ? true : _b, code = _a.code, scope = _a.scope, table = _a.table, _c = _a.table_key, table_key = _c === void 0 ? '' : _c, _d = _a.lower_bound, lower_bound = _d === void 0 ? '' : _d, _e = _a.upper_bound, upper_bound = _e === void 0 ? '' : _e, _f = _a.index_position, index_position = _f === void 0 ? 1 : _f, _g = _a.key_type, key_type = _g === void 0 ? '' : _g, _h = _a.limit, limit = _h === void 0 ? 10 : _h;
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_j) {
                 switch (_j.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/chain/get_table_rows", {
+                    case 0: return [4 /*yield*/, this.fetch('/v1/chain/get_table_rows', {
                             json: json,
                             code: code,
                             scope: scope,
@@ -301,7 +294,7 @@ var JsonRpc = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         _a = eosjs_numeric_1.convertLegacyPublicKeys;
-                        return [4 /*yield*/, this.fetch("/v1/chain/get_required_keys", {
+                        return [4 /*yield*/, this.fetch('/v1/chain/get_required_keys', {
                                 transaction: args.transaction,
                                 available_keys: args.availableKeys,
                             })];
@@ -316,10 +309,10 @@ var JsonRpc = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/chain/push_transaction", {
+                    case 0: return [4 /*yield*/, this.fetch('/v1/chain/push_transaction', {
                             signatures: signatures,
                             compression: 0,
-                            packed_context_free_data: "",
+                            packed_context_free_data: '',
                             packed_trx: arrayToHex(serializedTransaction),
                         })];
                     case 1: return [2 /*return*/, _b.sent()];
@@ -331,57 +324,53 @@ var JsonRpc = /** @class */ (function () {
     JsonRpc.prototype.db_size_get = function () {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, this.fetch("/v1/db_size/get", {})];
+                case 0: return [4 /*yield*/, this.fetch('/v1/db_size/get', {})];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         }); });
     };
     /** Raw call to `/v1/history/get_actions` */
-    // tslint:disable-next-line:variable-name
-    JsonRpc.prototype.history_get_actions = function (account_name, pos, offset) {
+    JsonRpc.prototype.history_get_actions = function (accountName, pos, offset) {
         if (pos === void 0) { pos = null; }
         if (offset === void 0) { offset = null; }
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/history/get_actions", { account_name: account_name, pos: pos, offset: offset })];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/history/get_actions', { account_name: accountName, pos: pos, offset: offset })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
     /** Raw call to `/v1/history/get_transaction` */
-    // tslint:disable-next-line:variable-name
-    JsonRpc.prototype.history_get_transaction = function (id, block_num_hint) {
-        if (block_num_hint === void 0) { block_num_hint = null; }
+    JsonRpc.prototype.history_get_transaction = function (id, blockNumHint) {
+        if (blockNumHint === void 0) { blockNumHint = null; }
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/history/get_transaction", { id: id, block_num_hint: block_num_hint })];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/history/get_transaction', { id: id, block_num_hint: blockNumHint })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
     /** Raw call to `/v1/history/get_key_accounts` */
-    // tslint:disable-next-line:variable-name
-    JsonRpc.prototype.history_get_key_accounts = function (public_key) {
+    JsonRpc.prototype.history_get_key_accounts = function (publicKey) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/history/get_key_accounts", { public_key: public_key })];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/history/get_key_accounts', { public_key: publicKey })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
     /** Raw call to `/v1/history/get_controlled_accounts` */
-    // tslint:disable-next-line:variable-name
-    JsonRpc.prototype.history_get_controlled_accounts = function (controlling_account) {
+    JsonRpc.prototype.history_get_controlled_accounts = function (controllingAccount) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetch("/v1/history/get_controlled_accounts", { controlling_account: controlling_account })];
+                    case 0: return [4 /*yield*/, this.fetch('/v1/history/get_controlled_accounts', { controlling_account: controllingAccount })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -389,5 +378,5 @@ var JsonRpc = /** @class */ (function () {
     };
     return JsonRpc;
 }()); // JsonRpc
-exports.default = JsonRpc;
+exports.JsonRpc = JsonRpc;
 //# sourceMappingURL=eosjs-jsonrpc.js.map

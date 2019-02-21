@@ -34,10 +34,9 @@ var __values = (this && this.__values) || function (o) {
     };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// tslint:disable-next-line:no-var-requires
-var ripemd160 = require("./ripemd").RIPEMD160.hash;
-var base58Chars = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-var base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+var ripemd160 = require('./ripemd').RIPEMD160.hash;
+var base58Chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+var base64Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 function create_base58_map() {
     var base58M = Array(256).fill(-1);
     for (var i = 0; i < base58Chars.length; ++i) {
@@ -51,7 +50,7 @@ function create_base64_map() {
     for (var i = 0; i < base64Chars.length; ++i) {
         base64M[base64Chars.charCodeAt(i)] = i;
     }
-    base64M["=".charCodeAt(0)] = 0;
+    base64M['='.charCodeAt(0)] = 0;
     return base64M;
 }
 var base64Map = create_base64_map();
@@ -78,17 +77,17 @@ function decimalToBinary(size, s) {
     var result = new Uint8Array(size);
     for (var i = 0; i < s.length; ++i) {
         var srcDigit = s.charCodeAt(i);
-        if (srcDigit < "0".charCodeAt(0) || srcDigit > "9".charCodeAt(0)) {
-            throw new Error("invalid number");
+        if (srcDigit < '0'.charCodeAt(0) || srcDigit > '9'.charCodeAt(0)) {
+            throw new Error('invalid number');
         }
-        var carry = srcDigit - "0".charCodeAt(0);
+        var carry = srcDigit - '0'.charCodeAt(0);
         for (var j = 0; j < size; ++j) {
             var x = result[j] * 10 + carry;
             result[j] = x;
             carry = x >> 8;
         }
         if (carry) {
-            throw new Error("number is out of range");
+            throw new Error('number is out of range');
         }
     }
     return result;
@@ -99,7 +98,7 @@ exports.decimalToBinary = decimalToBinary;
  * @param size bignum size (bytes)
  */
 function signedDecimalToBinary(size, s) {
-    var negative = s[0] === "-";
+    var negative = s[0] === '-';
     if (negative) {
         s = s.substr(1);
     }
@@ -107,11 +106,11 @@ function signedDecimalToBinary(size, s) {
     if (negative) {
         negate(result);
         if (!isNegative(result)) {
-            throw new Error("number is out of range");
+            throw new Error('number is out of range');
         }
     }
     else if (isNegative(result)) {
-        throw new Error("number is out of range");
+        throw new Error('number is out of range');
     }
     return result;
 }
@@ -122,16 +121,16 @@ exports.signedDecimalToBinary = signedDecimalToBinary;
  */
 function binaryToDecimal(bignum, minDigits) {
     if (minDigits === void 0) { minDigits = 1; }
-    var result = Array(minDigits).fill("0".charCodeAt(0));
+    var result = Array(minDigits).fill('0'.charCodeAt(0));
     for (var i = bignum.length - 1; i >= 0; --i) {
         var carry = bignum[i];
         for (var j = 0; j < result.length; ++j) {
-            var x = ((result[j] - "0".charCodeAt(0)) << 8) + carry;
-            result[j] = "0".charCodeAt(0) + x % 10;
+            var x = ((result[j] - '0'.charCodeAt(0)) << 8) + carry;
+            result[j] = '0'.charCodeAt(0) + x % 10;
             carry = (x / 10) | 0;
         }
         while (carry) {
-            result.push("0".charCodeAt(0) + carry % 10);
+            result.push('0'.charCodeAt(0) + carry % 10);
             carry = (carry / 10) | 0;
         }
     }
@@ -148,7 +147,7 @@ function signedBinaryToDecimal(bignum, minDigits) {
     if (isNegative(bignum)) {
         var x = bignum.slice();
         negate(x);
-        return "-" + binaryToDecimal(x, minDigits);
+        return '-' + binaryToDecimal(x, minDigits);
     }
     return binaryToDecimal(bignum, minDigits);
 }
@@ -162,7 +161,7 @@ function base58ToBinary(size, s) {
     for (var i = 0; i < s.length; ++i) {
         var carry = base58Map[s.charCodeAt(i)];
         if (carry < 0) {
-            throw new Error("invalid base-58 value");
+            throw new Error('invalid base-58 value');
         }
         for (var j = 0; j < size; ++j) {
             var x = result[j] * 58 + carry;
@@ -170,7 +169,7 @@ function base58ToBinary(size, s) {
             carry = x >> 8;
         }
         if (carry) {
-            throw new Error("base-58 value is out of range");
+            throw new Error('base-58 value is out of range');
         }
     }
     result.reverse();
@@ -214,7 +213,7 @@ function binaryToBase58(bignum, minDigits) {
                 break;
             }
             else {
-                result.push("1".charCodeAt(0));
+                result.push('1'.charCodeAt(0));
             }
         }
     }
@@ -232,16 +231,16 @@ exports.binaryToBase58 = binaryToBase58;
 /** Convert an unsigned base-64 number in `s` to a bignum */
 function base64ToBinary(s) {
     var len = s.length;
-    if ((len & 3) === 1 && s[len - 1] === "=") {
+    if ((len & 3) === 1 && s[len - 1] === '=') {
         len -= 1;
     } // fc appends an extra '='
     if ((len & 3) !== 0) {
-        throw new Error("base-64 value is not padded correctly");
+        throw new Error('base-64 value is not padded correctly');
     }
     var groups = len >> 2;
     var bytes = groups * 3;
-    if (len > 0 && s[len - 1] === "=") {
-        if (s[len - 2] === "=") {
+    if (len > 0 && s[len - 1] === '=') {
+        if (s[len - 2] === '=') {
             bytes -= 2;
         }
         else {
@@ -287,7 +286,7 @@ function stringToKey(s, type, size, suffix) {
     var digest = new Uint8Array(digestSuffixRipemd160(result.data, suffix));
     if (digest[0] !== whole[size + 0] || digest[1] !== whole[size + 1]
         || digest[2] !== whole[size + 2] || digest[3] !== whole[size + 3]) {
-        throw new Error("checksum doesn't match");
+        throw new Error('checksum doesn\'t match');
     }
     return result;
 }
@@ -304,10 +303,10 @@ function keyToString(key, suffix, prefix) {
 }
 /** Convert key in `s` to binary form */
 function stringToPublicKey(s) {
-    if (typeof s !== "string") {
-        throw new Error("expected string containing public key");
+    if (typeof s !== 'string') {
+        throw new Error('expected string containing public key');
     }
-    if (s.substr(0, 3) === "EOS") {
+    if (s.substr(0, 3) === 'EOS') {
         var whole = base58ToBinary(exports.publicKeyDataSize + 4, s.substr(3));
         var key = { type: 0 /* k1 */, data: new Uint8Array(exports.publicKeyDataSize) };
         for (var i = 0; i < exports.publicKeyDataSize; ++i) {
@@ -316,31 +315,31 @@ function stringToPublicKey(s) {
         var digest = new Uint8Array(ripemd160(key.data));
         if (digest[0] !== whole[exports.publicKeyDataSize] || digest[1] !== whole[34]
             || digest[2] !== whole[35] || digest[3] !== whole[36]) {
-            throw new Error("checksum doesn't match");
+            throw new Error('checksum doesn\'t match');
         }
         return key;
     }
-    else if (s.substr(0, 7) === "PUB_K1_") {
-        return stringToKey(s.substr(7), 0 /* k1 */, exports.publicKeyDataSize, "K1");
+    else if (s.substr(0, 7) === 'PUB_K1_') {
+        return stringToKey(s.substr(7), 0 /* k1 */, exports.publicKeyDataSize, 'K1');
     }
-    else if (s.substr(0, 7) === "PUB_R1_") {
-        return stringToKey(s.substr(7), 1 /* r1 */, exports.publicKeyDataSize, "R1");
+    else if (s.substr(0, 7) === 'PUB_R1_') {
+        return stringToKey(s.substr(7), 1 /* r1 */, exports.publicKeyDataSize, 'R1');
     }
     else {
-        throw new Error("unrecognized public key format");
+        throw new Error('unrecognized public key format');
     }
 }
 exports.stringToPublicKey = stringToPublicKey;
 /** Convert `key` to string (base-58) form */
 function publicKeyToString(key) {
     if (key.type === 0 /* k1 */ && key.data.length === exports.publicKeyDataSize) {
-        return keyToString(key, "K1", "PUB_K1_");
+        return keyToString(key, 'K1', 'PUB_K1_');
     }
     else if (key.type === 1 /* r1 */ && key.data.length === exports.publicKeyDataSize) {
-        return keyToString(key, "R1", "PUB_R1_");
+        return keyToString(key, 'R1', 'PUB_R1_');
     }
     else {
-        throw new Error("unrecognized public key format");
+        throw new Error('unrecognized public key format');
     }
 }
 exports.publicKeyToString = publicKeyToString;
@@ -348,7 +347,7 @@ exports.publicKeyToString = publicKeyToString;
  * Leaves other formats untouched
  */
 function convertLegacyPublicKey(s) {
-    if (s.substr(0, 3) === "EOS") {
+    if (s.substr(0, 3) === 'EOS') {
         return publicKeyToString(stringToPublicKey(s));
     }
     return s;
@@ -363,53 +362,53 @@ function convertLegacyPublicKeys(keys) {
 exports.convertLegacyPublicKeys = convertLegacyPublicKeys;
 /** Convert key in `s` to binary form */
 function stringToPrivateKey(s) {
-    if (typeof s !== "string") {
-        throw new Error("expected string containing private key");
+    if (typeof s !== 'string') {
+        throw new Error('expected string containing private key');
     }
-    if (s.substr(0, 7) === "PVT_R1_") {
-        return stringToKey(s.substr(7), 1 /* r1 */, exports.privateKeyDataSize, "R1");
+    if (s.substr(0, 7) === 'PVT_R1_') {
+        return stringToKey(s.substr(7), 1 /* r1 */, exports.privateKeyDataSize, 'R1');
     }
     else {
-        throw new Error("unrecognized private key format");
+        throw new Error('unrecognized private key format');
     }
 }
 exports.stringToPrivateKey = stringToPrivateKey;
 /** Convert `key` to string (base-58) form */
 function privateKeyToString(key) {
     if (key.type === 1 /* r1 */) {
-        return keyToString(key, "R1", "PVT_R1_");
+        return keyToString(key, 'R1', 'PVT_R1_');
     }
     else {
-        throw new Error("unrecognized private key format");
+        throw new Error('unrecognized private key format');
     }
 }
 exports.privateKeyToString = privateKeyToString;
 /** Convert key in `s` to binary form */
 function stringToSignature(s) {
-    if (typeof s !== "string") {
-        throw new Error("expected string containing signature");
+    if (typeof s !== 'string') {
+        throw new Error('expected string containing signature');
     }
-    if (s.substr(0, 7) === "SIG_K1_") {
-        return stringToKey(s.substr(7), 0 /* k1 */, exports.signatureDataSize, "K1");
+    if (s.substr(0, 7) === 'SIG_K1_') {
+        return stringToKey(s.substr(7), 0 /* k1 */, exports.signatureDataSize, 'K1');
     }
-    else if (s.substr(0, 7) === "SIG_R1_") {
-        return stringToKey(s.substr(7), 1 /* r1 */, exports.signatureDataSize, "R1");
+    else if (s.substr(0, 7) === 'SIG_R1_') {
+        return stringToKey(s.substr(7), 1 /* r1 */, exports.signatureDataSize, 'R1');
     }
     else {
-        throw new Error("unrecognized signature format");
+        throw new Error('unrecognized signature format');
     }
 }
 exports.stringToSignature = stringToSignature;
 /** Convert `signature` to string (base-58) form */
 function signatureToString(signature) {
     if (signature.type === 0 /* k1 */) {
-        return keyToString(signature, "K1", "SIG_K1_");
+        return keyToString(signature, 'K1', 'SIG_K1_');
     }
     else if (signature.type === 1 /* r1 */) {
-        return keyToString(signature, "R1", "SIG_R1_");
+        return keyToString(signature, 'R1', 'SIG_R1_');
     }
     else {
-        throw new Error("unrecognized signature format");
+        throw new Error('unrecognized signature format');
     }
 }
 exports.signatureToString = signatureToString;

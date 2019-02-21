@@ -34,5 +34,5 @@ var RpcError = /** @class */ (function (_super) {
     }
     return RpcError;
 }(Error));
-exports.default = RpcError;
+exports.RpcError = RpcError;
 //# sourceMappingURL=eosjs-rpcerror.js.map

@@ -87,9 +87,7 @@ var __values = (this && this.__values) || function (o) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ser = require("./eosjs-serialize");
-// tslint:disable-next-line
 var abiAbi = require('../src/abi.abi.json');
-// tslint:disable-next-line
 var transactionAbi = require('../src/transaction.abi.json');
 var Api = /** @class */ (function () {
     /**
@@ -125,10 +123,10 @@ var Api = /** @class */ (function () {
             array: rawAbi,
         });
         if (!ser.supportedAbiVersion(buffer.getString())) {
-            throw new Error("Unsupported abi version");
+            throw new Error('Unsupported abi version');
         }
         buffer.restartRead();
-        return this.abiTypes.get("abi_def").deserialize(buffer);
+        return this.abiTypes.get('abi_def').deserialize(buffer);
     };
     /** Get abi in both binary and structured forms. Fetch when needed. */
     Api.prototype.getCachedAbi = function (accountName, reload) {
@@ -250,14 +248,14 @@ var Api = /** @class */ (function () {
     /** Convert a transaction to binary */
     Api.prototype.serializeTransaction = function (transaction) {
         var buffer = new ser.SerialBuffer({ textEncoder: this.textEncoder, textDecoder: this.textDecoder });
-        this.serialize(buffer, "transaction", __assign({ max_net_usage_words: 0, max_cpu_usage_ms: 0, delay_sec: 0, context_free_actions: [], actions: [], transaction_extensions: [] }, transaction));
+        this.serialize(buffer, 'transaction', __assign({ max_net_usage_words: 0, max_cpu_usage_ms: 0, delay_sec: 0, context_free_actions: [], actions: [], transaction_extensions: [] }, transaction));
         return buffer.asUint8Array();
     };
     /** Convert a transaction from binary. Leaves actions in hex. */
     Api.prototype.deserializeTransaction = function (transaction) {
         var buffer = new ser.SerialBuffer({ textEncoder: this.textEncoder, textDecoder: this.textDecoder });
         buffer.pushArray(transaction);
-        return this.deserialize(buffer, "transaction");
+        return this.deserialize(buffer, 'transaction');
     };
     /** Convert actions to hex */
     Api.prototype.serializeActions = function (actions) {
@@ -316,7 +314,7 @@ var Api = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (typeof transaction === "string") {
+                        if (typeof transaction === 'string') {
                             transaction = ser.hexToUint8Array(transaction);
                         }
                         deserializedTransaction = this.deserializeTransaction(transaction);
@@ -353,7 +351,7 @@ var Api = /** @class */ (function () {
                         this.chainId = info.chain_id;
                         _g.label = 2;
                     case 2:
-                        if (!(typeof blocksBehind === "number" && expireSeconds)) return [3 /*break*/, 6];
+                        if (!(typeof blocksBehind === 'number' && expireSeconds)) return [3 /*break*/, 6];
                         if (!!info) return [3 /*break*/, 4];
                         return [4 /*yield*/, this.rpc.get_info()];
                     case 3:
@@ -366,7 +364,7 @@ var Api = /** @class */ (function () {
                         _g.label = 6;
                     case 6:
                         if (!this.hasRequiredTaposFields(transaction)) {
-                            throw new Error("Required configuration or TAPOS fields are not present");
+                            throw new Error('Required configuration or TAPOS fields are not present');
                         }
                         return [4 /*yield*/, this.getTransactionAbis(transaction)];
                     case 7:
@@ -422,5 +420,5 @@ var Api = /** @class */ (function () {
     };
     return Api;
 }()); // Api
-exports.default = Api;
+exports.Api = Api;
 //# sourceMappingURL=eosjs-api.js.map

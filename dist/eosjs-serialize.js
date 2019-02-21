@@ -69,7 +69,7 @@ var SerialBuffer = /** @class */ (function () {
         this.array = array || new Uint8Array(1024);
         this.length = array ? array.length : 0;
         this.textEncoder = textEncoder || new TextEncoder();
-        this.textDecoder = textDecoder || new TextDecoder("utf-8", { fatal: true });
+        this.textDecoder = textDecoder || new TextDecoder('utf-8', { fatal: true });
     }
     /** Resize `array` if needed to have at least `size` bytes free */
     SerialBuffer.prototype.reserve = function (size) {
@@ -115,19 +115,19 @@ var SerialBuffer = /** @class */ (function () {
         if (this.readPos < this.length) {
             return this.array[this.readPos++];
         }
-        throw new Error("Read past end of buffer");
+        throw new Error('Read past end of buffer');
     };
     /** Append bytes in `v`. Throws if `len` doesn't match `v.length` */
     SerialBuffer.prototype.pushUint8ArrayChecked = function (v, len) {
         if (v.length !== len) {
-            throw new Error("Binary data has incorrect size");
+            throw new Error('Binary data has incorrect size');
         }
         this.pushArray(v);
     };
     /** Get `len` bytes */
     SerialBuffer.prototype.getUint8Array = function (len) {
         if (this.readPos + len > this.length) {
-            throw new Error("Read past end of buffer");
+            throw new Error('Read past end of buffer');
         }
         var result = new Uint8Array(this.array.buffer, this.array.byteOffset + this.readPos, len);
         this.readPos += len;
@@ -230,15 +230,15 @@ var SerialBuffer = /** @class */ (function () {
     };
     /** Append a `name` */
     SerialBuffer.prototype.pushName = function (s) {
-        if (typeof s !== "string") {
-            throw new Error("Expected string containing name");
+        if (typeof s !== 'string') {
+            throw new Error('Expected string containing name');
         }
         function charToSymbol(c) {
-            if (c >= "a".charCodeAt(0) && c <= "z".charCodeAt(0)) {
-                return (c - "a".charCodeAt(0)) + 6;
+            if (c >= 'a'.charCodeAt(0) && c <= 'z'.charCodeAt(0)) {
+                return (c - 'a'.charCodeAt(0)) + 6;
             }
-            if (c >= "1".charCodeAt(0) && c <= "5".charCodeAt(0)) {
-                return (c - "1".charCodeAt(0)) + 1;
+            if (c >= '1'.charCodeAt(0) && c <= '5'.charCodeAt(0)) {
+                return (c - '1'.charCodeAt(0)) + 1;
             }
             return 0;
         }
@@ -261,7 +261,7 @@ var SerialBuffer = /** @class */ (function () {
     /** Get a `name` */
     SerialBuffer.prototype.getName = function () {
         var a = this.getUint8Array(8);
-        var result = "";
+        var result = '';
         for (var bit = 63; bit >= 0;) {
             var c = 0;
             for (var i = 0; i < 5; ++i) {
@@ -271,19 +271,16 @@ var SerialBuffer = /** @class */ (function () {
                 }
             }
             if (c >= 6) {
-                result += String.fromCharCode(c + "a".charCodeAt(0) - 6);
+                result += String.fromCharCode(c + 'a'.charCodeAt(0) - 6);
             }
             else if (c >= 1) {
-                result += String.fromCharCode(c + "1".charCodeAt(0) - 1);
+                result += String.fromCharCode(c + '1'.charCodeAt(0) - 1);
             }
             else {
-                result += ".";
+                result += '.';
             }
         }
-        if (result === ".............") {
-            return result;
-        }
-        while (result.endsWith(".")) {
+        while (result.endsWith('.')) {
             result = result.substr(0, result.length - 1);
         }
         return result;
@@ -307,8 +304,8 @@ var SerialBuffer = /** @class */ (function () {
     };
     /** Append a `symbol_code`. Unlike `symbol`, `symbol_code` doesn't include a precision. */
     SerialBuffer.prototype.pushSymbolCode = function (name) {
-        if (typeof name !== "string") {
-            throw new Error("Expected string containing symbol_code");
+        if (typeof name !== 'string') {
+            throw new Error('Expected string containing symbol_code');
         }
         var a = [];
         a.push.apply(a, __spread(this.textEncoder.encode(name)));
@@ -354,29 +351,29 @@ var SerialBuffer = /** @class */ (function () {
     };
     /** Append an asset */
     SerialBuffer.prototype.pushAsset = function (s) {
-        if (typeof s !== "string") {
-            throw new Error("Expected string containing asset");
+        if (typeof s !== 'string') {
+            throw new Error('Expected string containing asset');
         }
         s = s.trim();
         var pos = 0;
-        var amount = "";
+        var amount = '';
         var precision = 0;
-        if (s[pos] === "-") {
-            amount += "-";
+        if (s[pos] === '-') {
+            amount += '-';
             ++pos;
         }
         var foundDigit = false;
-        while (pos < s.length && s.charCodeAt(pos) >= "0".charCodeAt(0) && s.charCodeAt(pos) <= "9".charCodeAt(0)) {
+        while (pos < s.length && s.charCodeAt(pos) >= '0'.charCodeAt(0) && s.charCodeAt(pos) <= '9'.charCodeAt(0)) {
             foundDigit = true;
             amount += s[pos];
             ++pos;
         }
         if (!foundDigit) {
-            throw new Error("Asset must begin with a number");
+            throw new Error('Asset must begin with a number');
         }
-        if (s[pos] === ".") {
+        if (s[pos] === '.') {
             ++pos;
-            while (pos < s.length && s.charCodeAt(pos) >= "0".charCodeAt(0) && s.charCodeAt(pos) <= "9".charCodeAt(0)) {
+            while (pos < s.length && s.charCodeAt(pos) >= '0'.charCodeAt(0) && s.charCodeAt(pos) <= '9'.charCodeAt(0)) {
                 amount += s[pos];
                 ++precision;
                 ++pos;
@@ -392,9 +389,9 @@ var SerialBuffer = /** @class */ (function () {
         var _a = this.getSymbol(), name = _a.name, precision = _a.precision;
         var s = numeric.signedBinaryToDecimal(amount, precision + 1);
         if (precision) {
-            s = s.substr(0, s.length - precision) + "." + s.substr(s.length - precision);
+            s = s.substr(0, s.length - precision) + '.' + s.substr(s.length - precision);
         }
-        return s + " " + name;
+        return s + ' ' + name;
     };
     /** Append a public key */
     SerialBuffer.prototype.pushPublicKey = function (s) {
@@ -437,19 +434,19 @@ var SerialBuffer = /** @class */ (function () {
 exports.SerialBuffer = SerialBuffer;
 /** Is this a supported ABI version? */
 function supportedAbiVersion(version) {
-    return version.startsWith("eosio::abi/1.");
+    return version.startsWith('eosio::abi/1.');
 }
 exports.supportedAbiVersion = supportedAbiVersion;
 function checkDateParse(date) {
     var result = Date.parse(date);
     if (Number.isNaN(result)) {
-        throw new Error("Invalid time format");
+        throw new Error('Invalid time format');
     }
     return result;
 }
 /** Convert date in ISO format to `time_point` (miliseconds since epoch) */
 function dateToTimePoint(date) {
-    return Math.round(checkDateParse(date + "Z") * 1000);
+    return Math.round(checkDateParse(date + 'Z') * 1000);
 }
 exports.dateToTimePoint = dateToTimePoint;
 /** Convert `time_point` (miliseconds since epoch) to date in ISO format */
@@ -460,7 +457,7 @@ function timePointToDate(us) {
 exports.timePointToDate = timePointToDate;
 /** Convert date in ISO format to `time_point_sec` (seconds since epoch) */
 function dateToTimePointSec(date) {
-    return Math.round(checkDateParse(date + "Z") / 1000);
+    return Math.round(checkDateParse(date + 'Z') / 1000);
 }
 exports.dateToTimePointSec = dateToTimePointSec;
 /** Convert `time_point_sec` (seconds since epoch) to to date in ISO format */
@@ -471,7 +468,7 @@ function timePointSecToDate(sec) {
 exports.timePointSecToDate = timePointSecToDate;
 /** Convert date in ISO format to `block_timestamp_type` (half-seconds since a different epoch) */
 function dateToBlockTimestamp(date) {
-    return Math.round((checkDateParse(date + "Z") - 946684800000) / 500);
+    return Math.round((checkDateParse(date + 'Z') - 946684800000) / 500);
 }
 exports.dateToBlockTimestamp = dateToBlockTimestamp;
 /** Convert `block_timestamp_type` (half-seconds since a different epoch) to to date in ISO format */
@@ -482,12 +479,12 @@ function blockTimestampToDate(slot) {
 exports.blockTimestampToDate = blockTimestampToDate;
 /** Convert `string` to `Symbol`. format: `precision,NAME`. */
 function stringToSymbol(s) {
-    if (typeof s !== "string") {
-        throw new Error("Expected string containing symbol");
+    if (typeof s !== 'string') {
+        throw new Error('Expected string containing symbol');
     }
     var m = s.match(/^([0-9]+),([A-Z]+)$/);
     if (!m) {
-        throw new Error("Invalid symbol");
+        throw new Error('Invalid symbol');
     }
     return { name: m[2], precision: +m[1] };
 }
@@ -495,17 +492,17 @@ exports.stringToSymbol = stringToSymbol;
 /** Convert `Symbol` to `string`. format: `precision,NAME`. */
 function symbolToString(_a) {
     var name = _a.name, precision = _a.precision;
-    return precision + "," + name;
+    return precision + ',' + name;
 }
 exports.symbolToString = symbolToString;
 /** Convert binary data to hex */
 function arrayToHex(data) {
     var e_1, _a;
-    var result = "";
+    var result = '';
     try {
         for (var data_1 = __values(data), data_1_1 = data_1.next(); !data_1_1.done; data_1_1 = data_1.next()) {
             var x = data_1_1.value;
-            result += ("00" + x.toString(16)).slice(-2);
+            result += ('00' + x.toString(16)).slice(-2);
         }
     }
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -520,18 +517,18 @@ function arrayToHex(data) {
 exports.arrayToHex = arrayToHex;
 /** Convert hex to binary data */
 function hexToUint8Array(hex) {
-    if (typeof hex !== "string") {
-        throw new Error("Expected string containing hex digits");
+    if (typeof hex !== 'string') {
+        throw new Error('Expected string containing hex digits');
     }
     if (hex.length % 2) {
-        throw new Error("Odd number of hex digits");
+        throw new Error('Odd number of hex digits');
     }
     var l = hex.length / 2;
     var result = new Uint8Array(l);
     for (var i = 0; i < l; ++i) {
         var x = parseInt(hex.substr(i * 2, 2), 16);
         if (Number.isNaN(x)) {
-            throw new Error("Expected hex string");
+            throw new Error('Expected hex string');
         }
         result[i] = x;
     }
@@ -539,17 +536,17 @@ function hexToUint8Array(hex) {
 }
 exports.hexToUint8Array = hexToUint8Array;
 function serializeUnknown(buffer, data) {
-    throw new Error("Don't know how to serialize " + this.name);
+    throw new Error('Don\'t know how to serialize ' + this.name);
 }
 function deserializeUnknown(buffer) {
-    throw new Error("Don't know how to deserialize " + this.name);
+    throw new Error('Don\'t know how to deserialize ' + this.name);
 }
 function serializeStruct(buffer, data, state, allowExtensions) {
     if (state === void 0) { state = new SerializerState(); }
     if (allowExtensions === void 0) { allowExtensions = true; }
     var e_2, _a;
-    if (typeof data !== "object") {
-        throw new Error("expected object containing data: " + JSON.stringify(data));
+    if (typeof data !== 'object') {
+        throw new Error('expected object containing data: ' + JSON.stringify(data));
     }
     if (this.base) {
         this.base.serialize(buffer, data, state, allowExtensions);
@@ -559,7 +556,7 @@ function serializeStruct(buffer, data, state, allowExtensions) {
             var field = _c.value;
             if (field.name in data) {
                 if (state.skippedBinaryExtension) {
-                    throw new Error("unexpected " + this.name + "." + field.name);
+                    throw new Error('unexpected ' + this.name + '.' + field.name);
                 }
                 field.type.serialize(buffer, data[field.name], state, allowExtensions && field === this.fields[this.fields.length - 1]);
             }
@@ -568,7 +565,7 @@ function serializeStruct(buffer, data, state, allowExtensions) {
                     state.skippedBinaryExtension = true;
                 }
                 else {
-                    throw new Error("missing " + this.name + "." + field.name + " (type=" + field.type.name + ")");
+                    throw new Error('missing ' + this.name + '.' + field.name + ' (type=' + field.type.name + ')');
                 }
             }
         }
@@ -613,7 +610,7 @@ function deserializeStruct(buffer, state, allowExtensions) {
     return result;
 }
 function serializeVariant(buffer, data, state, allowExtensions) {
-    if (!Array.isArray(data) || data.length !== 2 || typeof data[0] !== "string") {
+    if (!Array.isArray(data) || data.length !== 2 || typeof data[0] !== 'string') {
         throw new Error('expected variant: ["type", value]');
     }
     var i = this.fields.findIndex(function (field) { return field.name === data[0]; });
@@ -680,14 +677,14 @@ function deserializeExtension(buffer, state, allowExtensions) {
     return this.extensionOf.deserialize(buffer, state, allowExtensions);
 }
 function createType(attrs) {
-    return __assign({ name: "<missing name>", aliasOfName: "", arrayOf: null, optionalOf: null, extensionOf: null, baseName: "", base: null, fields: [], serialize: serializeUnknown, deserialize: deserializeUnknown }, attrs);
+    return __assign({ name: '<missing name>', aliasOfName: '', arrayOf: null, optionalOf: null, extensionOf: null, baseName: '', base: null, fields: [], serialize: serializeUnknown, deserialize: deserializeUnknown }, attrs);
 }
 function checkRange(orig, converted) {
-    if (Number.isNaN(+orig) || Number.isNaN(+converted) || (typeof orig !== "number" && typeof orig !== "string")) {
-        throw new Error("Expected number");
+    if (Number.isNaN(+orig) || Number.isNaN(+converted) || (typeof orig !== 'number' && typeof orig !== 'string')) {
+        throw new Error('Expected number');
     }
     if (+orig !== +converted) {
-        throw new Error("Number is out of range");
+        throw new Error('Number is out of range');
     }
     return +orig;
 }
@@ -695,98 +692,98 @@ function checkRange(orig, converted) {
 function createInitialTypes() {
     var result = new Map(Object.entries({
         bool: createType({
-            name: "bool",
+            name: 'bool',
             serialize: function (buffer, data) {
-                if (typeof data !== "boolean") {
-                    throw new Error("Expected true or false");
+                if (typeof data !== 'boolean') {
+                    throw new Error('Expected true or false');
                 }
                 buffer.push(data ? 1 : 0);
             },
             deserialize: function (buffer) { return !!buffer.get(); },
         }),
         uint8: createType({
-            name: "uint8",
+            name: 'uint8',
             serialize: function (buffer, data) { buffer.push(checkRange(data, data & 0xff)); },
             deserialize: function (buffer) { return buffer.get(); },
         }),
         int8: createType({
-            name: "int8",
+            name: 'int8',
             serialize: function (buffer, data) { buffer.push(checkRange(data, data << 24 >> 24)); },
             deserialize: function (buffer) { return buffer.get() << 24 >> 24; },
         }),
         uint16: createType({
-            name: "uint16",
+            name: 'uint16',
             serialize: function (buffer, data) { buffer.pushUint16(checkRange(data, data & 0xffff)); },
             deserialize: function (buffer) { return buffer.getUint16(); },
         }),
         int16: createType({
-            name: "int16",
+            name: 'int16',
             serialize: function (buffer, data) { buffer.pushUint16(checkRange(data, data << 16 >> 16)); },
             deserialize: function (buffer) { return buffer.getUint16() << 16 >> 16; },
         }),
         uint32: createType({
-            name: "uint32",
+            name: 'uint32',
             serialize: function (buffer, data) { buffer.pushUint32(checkRange(data, data >>> 0)); },
             deserialize: function (buffer) { return buffer.getUint32(); },
         }),
         uint64: createType({
-            name: "uint64",
+            name: 'uint64',
             serialize: function (buffer, data) {
-                buffer.pushArray(numeric.decimalToBinary(8, "" + data));
+                buffer.pushArray(numeric.decimalToBinary(8, '' + data));
             },
             deserialize: function (buffer) { return numeric.binaryToDecimal(buffer.getUint8Array(8)); },
         }),
         int64: createType({
-            name: "int64",
+            name: 'int64',
             serialize: function (buffer, data) {
-                buffer.pushArray(numeric.signedDecimalToBinary(8, "" + data));
+                buffer.pushArray(numeric.signedDecimalToBinary(8, '' + data));
             },
             deserialize: function (buffer) { return numeric.signedBinaryToDecimal(buffer.getUint8Array(8)); },
         }),
         int32: createType({
-            name: "int32",
+            name: 'int32',
             serialize: function (buffer, data) { buffer.pushUint32(checkRange(data, data | 0)); },
             deserialize: function (buffer) { return buffer.getUint32() | 0; },
         }),
         varuint32: createType({
-            name: "varuint32",
+            name: 'varuint32',
             serialize: function (buffer, data) { buffer.pushVaruint32(checkRange(data, data >>> 0)); },
             deserialize: function (buffer) { return buffer.getVaruint32(); },
         }),
         varint32: createType({
-            name: "varint32",
+            name: 'varint32',
             serialize: function (buffer, data) { buffer.pushVarint32(checkRange(data, data | 0)); },
             deserialize: function (buffer) { return buffer.getVarint32(); },
         }),
         uint128: createType({
-            name: "uint128",
-            serialize: function (buffer, data) { buffer.pushArray(numeric.decimalToBinary(16, "" + data)); },
+            name: 'uint128',
+            serialize: function (buffer, data) { buffer.pushArray(numeric.decimalToBinary(16, '' + data)); },
             deserialize: function (buffer) { return numeric.binaryToDecimal(buffer.getUint8Array(16)); },
         }),
         int128: createType({
-            name: "int128",
+            name: 'int128',
             serialize: function (buffer, data) {
-                buffer.pushArray(numeric.signedDecimalToBinary(16, "" + data));
+                buffer.pushArray(numeric.signedDecimalToBinary(16, '' + data));
             },
             deserialize: function (buffer) { return numeric.signedBinaryToDecimal(buffer.getUint8Array(16)); },
         }),
         float32: createType({
-            name: "float32",
+            name: 'float32',
             serialize: function (buffer, data) { buffer.pushFloat32(data); },
             deserialize: function (buffer) { return buffer.getFloat32(); },
         }),
         float64: createType({
-            name: "float64",
+            name: 'float64',
             serialize: function (buffer, data) { buffer.pushFloat64(data); },
             deserialize: function (buffer) { return buffer.getFloat64(); },
         }),
         float128: createType({
-            name: "float128",
+            name: 'float128',
             serialize: function (buffer, data) { buffer.pushUint8ArrayChecked(hexToUint8Array(data), 16); },
             deserialize: function (buffer) { return arrayToHex(buffer.getUint8Array(16)); },
         }),
         bytes: createType({
-            name: "bytes",
+            name: 'bytes',
             serialize: function (buffer, data) {
                 if (data instanceof Uint8Array || Array.isArray(data)) {
                     buffer.pushBytes(data);
@@ -796,7 +793,7 @@ function createInitialTypes() {
                 }
             },
             deserialize: function (buffer, state) {
-                if (state.options.bytesAsUint8Array) {
+                if (state && state.options.bytesAsUint8Array) {
                     return buffer.getBytes();
                 }
                 else {
@@ -805,82 +802,82 @@ function createInitialTypes() {
             },
         }),
         string: createType({
-            name: "string",
+            name: 'string',
             serialize: function (buffer, data) { buffer.pushString(data); },
             deserialize: function (buffer) { return buffer.getString(); },
         }),
         name: createType({
-            name: "name",
+            name: 'name',
             serialize: function (buffer, data) { buffer.pushName(data); },
             deserialize: function (buffer) { return buffer.getName(); },
         }),
         time_point: createType({
-            name: "time_point",
+            name: 'time_point',
             serialize: function (buffer, data) { buffer.pushNumberAsUint64(dateToTimePoint(data)); },
             deserialize: function (buffer) { return timePointToDate(buffer.getUint64AsNumber()); },
         }),
         time_point_sec: createType({
-            name: "time_point_sec",
+            name: 'time_point_sec',
             serialize: function (buffer, data) { buffer.pushUint32(dateToTimePointSec(data)); },
             deserialize: function (buffer) { return timePointSecToDate(buffer.getUint32()); },
         }),
         block_timestamp_type: createType({
-            name: "block_timestamp_type",
+            name: 'block_timestamp_type',
             serialize: function (buffer, data) { buffer.pushUint32(dateToBlockTimestamp(data)); },
             deserialize: function (buffer) { return blockTimestampToDate(buffer.getUint32()); },
         }),
         symbol_code: createType({
-            name: "symbol_code",
+            name: 'symbol_code',
             serialize: function (buffer, data) { buffer.pushSymbolCode(data); },
             deserialize: function (buffer) { return buffer.getSymbolCode(); },
         }),
         symbol: createType({
-            name: "symbol",
+            name: 'symbol',
             serialize: function (buffer, data) { buffer.pushSymbol(stringToSymbol(data)); },
             deserialize: function (buffer) { return symbolToString(buffer.getSymbol()); },
         }),
         asset: createType({
-            name: "asset",
+            name: 'asset',
             serialize: function (buffer, data) { buffer.pushAsset(data); },
             deserialize: function (buffer) { return buffer.getAsset(); },
         }),
         checksum160: createType({
-            name: "checksum160",
+            name: 'checksum160',
             serialize: function (buffer, data) { buffer.pushUint8ArrayChecked(hexToUint8Array(data), 20); },
             deserialize: function (buffer) { return arrayToHex(buffer.getUint8Array(20)); },
         }),
         checksum256: createType({
-            name: "checksum256",
+            name: 'checksum256',
             serialize: function (buffer, data) { buffer.pushUint8ArrayChecked(hexToUint8Array(data), 32); },
             deserialize: function (buffer) { return arrayToHex(buffer.getUint8Array(32)); },
         }),
         checksum512: createType({
-            name: "checksum512",
+            name: 'checksum512',
             serialize: function (buffer, data) { buffer.pushUint8ArrayChecked(hexToUint8Array(data), 64); },
             deserialize: function (buffer) { return arrayToHex(buffer.getUint8Array(64)); },
         }),
         public_key: createType({
-            name: "public_key",
+            name: 'public_key',
             serialize: function (buffer, data) { buffer.pushPublicKey(data); },
             deserialize: function (buffer) { return buffer.getPublicKey(); },
         }),
         private_key: createType({
-            name: "private_key",
+            name: 'private_key',
             serialize: function (buffer, data) { buffer.pushPrivateKey(data); },
             deserialize: function (buffer) { return buffer.getPrivateKey(); },
         }),
         signature: createType({
-            name: "signature",
+            name: 'signature',
             serialize: function (buffer, data) { buffer.pushSignature(data); },
             deserialize: function (buffer) { return buffer.getSignature(); },
         }),
     }));
-    result.set("extended_asset", createType({
-        name: "extended_asset",
-        baseName: "",
+    result.set('extended_asset', createType({
+        name: 'extended_asset',
+        baseName: '',
         fields: [
-            { name: "quantity", typeName: "asset", type: result.get("asset") },
-            { name: "contract", typeName: "name", type: result.get("name") },
+            { name: 'quantity', typeName: 'asset', type: result.get('asset') },
+            { name: 'contract', typeName: 'name', type: result.get('name') },
         ],
         serialize: serializeStruct,
         deserialize: deserializeStruct,
@@ -897,7 +894,7 @@ function getType(types, name) {
     if (type) {
         return type;
     }
-    if (name.endsWith("[]")) {
+    if (name.endsWith('[]')) {
         return createType({
             name: name,
             arrayOf: getType(types, name.substr(0, name.length - 2)),
@@ -905,7 +902,7 @@ function getType(types, name) {
             deserialize: deserializeArray,
         });
     }
-    if (name.endsWith("?")) {
+    if (name.endsWith('?')) {
         return createType({
             name: name,
             optionalOf: getType(types, name.substr(0, name.length - 1)),
@@ -913,7 +910,7 @@ function getType(types, name) {
             deserialize: deserializeOptional,
         });
     }
-    if (name.endsWith("$")) {
+    if (name.endsWith('$')) {
         return createType({
             name: name,
             extensionOf: getType(types, name.substr(0, name.length - 1)),
@@ -921,7 +918,7 @@ function getType(types, name) {
             deserialize: deserializeExtension,
         });
     }
-    throw new Error("Unknown type: " + name);
+    throw new Error('Unknown type: ' + name);
 }
 exports.getType = getType;
 /**
@@ -1055,7 +1052,7 @@ exports.serializeAction = serializeAction;
 /** Deserialize action data. If `data` is a `string`, then it's assumed to be in hex. */
 function deserializeActionData(contract, account, name, data, textEncoder, textDecoder) {
     var action = contract.actions.get(name);
-    if (typeof data === "string") {
+    if (typeof data === 'string') {
         data = hexToUint8Array(data);
     }
     if (!action) {

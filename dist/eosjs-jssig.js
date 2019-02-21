@@ -92,7 +92,7 @@ var JsSignatureProvider = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_b) {
                 signBuf = Buffer.concat([
-                    new Buffer(chainId, "hex"), new Buffer(serializedTransaction), new Buffer(new Uint8Array(32)),
+                    new Buffer(chainId, 'hex'), new Buffer(serializedTransaction), new Buffer(new Uint8Array(32)),
                 ]);
                 signatures = requiredKeys.map(function (pub) { return ecc.Signature.sign(signBuf, _this.keys.get(eosjs_numeric_1.convertLegacyPublicKey(pub))).toString(); });
                 return [2 /*return*/, { signatures: signatures, serializedTransaction: serializedTransaction }];
@@ -101,5 +101,5 @@ var JsSignatureProvider = /** @class */ (function () {
     };
     return JsSignatureProvider;
 }());
-exports.default = JsSignatureProvider;
+exports.JsSignatureProvider = JsSignatureProvider;
 //# sourceMappingURL=eosjs-jssig.js.map
